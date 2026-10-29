@@ -1,0 +1,10 @@
+[
+  { "id": 1, "nombre": "Monstera", "categoria": "Interior", "precio": 45000, "emoji": "🌿", "descripcion": "Hojas grandes con cortes, crece rápido con luz indirecta." },
+  { "id": 2, "nombre": "Sansevieria", "categoria": "Interior", "precio": 30000, "emoji": "🪴", "descripcion": "Casi indestructible, perfecta si olvidas regar." },
+  { "id": 3, "nombre": "Aloe vera", "categoria": "Suculentas", "precio": 15000, "emoji": "🌵", "descripcion": "Planta medicinal que aguanta sol directo." },
+  { "id": 4, "nombre": "Echeveria", "categoria": "Suculentas", "precio": 12000, "emoji": "🌱", "descripcion": "Roseta compacta ideal para escritorios." },
+  { "id": 5, "nombre": "Buganvilia", "categoria": "Exterior", "precio": 38000, "emoji": "🌺", "descripcion": "Trepadora con flores intensas, ama el sol." },
+  { "id": 6, "nombre": "Helecho", "categoria": "Interior", "precio": 22000, "emoji": "🍃", "descripcion": "Necesita humedad y sombra." },
+  { "id": 7, "nombre": "Albahaca", "categoria": "Aromáticas", "precio": 8000, "emoji": "🌿", "descripcion": "Aromática para cocina, riego frecuente." },
+  { "id": 8, "nombre": "Menta", "categoria": "Aromáticas", "precio": 7000, "emoji": "🍃", "descripcion": "Crece sola y huele increíble." }
+]

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo de plantas</title>
+<style>
+  :root {
+    --fondo: #f3f6f4;
+    --tarjeta: #ffffff;
+    --texto: #16302b;
+    --suave: #5b7069;
+    --acento: #0f5c4d;
+    --resalte: #f2c94c;
+    --borde: #d5e0db;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #0f1a17;
+      --tarjeta: #172622;
+      --texto: #e6f0ec;
+      --suave: #9db3ab;
+      --acento: #6fd1b8;
+      --resalte: #f2c94c;
+      --borde: #2a3d37;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.5;
+  }
+  header { padding: 2.5rem 1.25rem 1rem; max-width: 960px; margin: 0 auto; }
+  h1 { font-size: clamp(2rem, 6vw, 3.2rem); margin: 0 0 .25rem; letter-spacing: -0.02em; }
+  header p { margin: 0; color: var(--suave); max-width: 50ch; }
+  .controles {
+    max-width: 960px; margin: 1rem auto; padding: 0 1.25rem;
+    display: flex; flex-wrap: wrap; gap: .75rem;
+  }
+  input, select {
+    font: inherit; padding: .6rem .8rem; border: 1px solid var(--borde);
+    border-radius: 8px; background: var(--tarjeta); color: var(--texto);
+  }
+  input { flex: 1 1 220px; }
+  input:focus-visible, select:focus-visible { outline: 3px solid var(--resalte); outline-offset: 1px; }
+  main {
+    max-width: 960px; margin: 0 auto; padding: 0 1.25rem 3rem;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem;
+  }
+  article {
+    background: var(--tarjeta); border: 1px solid var(--borde);
+    border-radius: 12px; padding: 1.1rem;
+  }
+  .emoji { font-size: 2.4rem; }
+  h2 { font-size: 1.2rem; margin: .4rem 0 .1rem; }
+  .cat { color: var(--suave); font-size: .9rem; margin: 0 0 .5rem; }
+  .desc { font-size: .95rem; margin: 0 0 .75rem; }
+  .precio { font-weight: bold; color: var(--acento); }
+  .vacio { grid-column: 1 / -1; color: var(--suave); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Catálogo de plantas</h1>
+  <p>Busca por nombre o filtra por categoría. Los datos se leen del archivo productos.json.</p>
+</header>
+
+<div class="controles">
+  <input id="buscar" type="search" placeholder="Buscar planta" aria-label="Buscar planta">
+  <select id="categoria" aria-label="Filtrar por categoría">
+    <option value="">Todas las categorías</option>
+  </select>
+</div>
+
+<main id="lista" aria-live="polite"></main>
+
+<script>
+  let productos = [];
+  const lista = document.getElementById('lista');
+  const buscar = document.getElementById('buscar');
+  const categoria = document.getElementById('categoria');
+
+  const formatoPrecio = new Intl.NumberFormat('es-CO', {
+    style: 'currency', currency: 'COP', maximumFractionDigits: 0
+  });
+
+  function mostrar() {
+    const q = buscar.value.trim().toLowerCase();
+    const cat = categoria.value;
+    const filtrados = productos.filter(p =>
+      (!cat || p.categoria === cat) &&
+      (p.nombre.toLowerCase().includes(q) || p.descripcion.toLowerCase().includes(q))
+    );
+
+    lista.innerHTML = '';
+    if (filtrados.length === 0) {
+      lista.innerHTML = '<p class="vacio">No hay plantas con ese filtro. Prueba otra búsqueda.</p>';
+      return;
+    }
+    for (const p of filtrados) {
+      const el = document.createElement('article');
+      el.innerHTML = `
+        <div class="emoji" aria-hidden="true">${p.emoji}</div>
+        <h2></h2>
+        <p class="cat"></p>
+        <p class="desc"></p>
+        <p class="precio">${formatoPrecio.format(p.precio)}</p>`;
+      el.querySelector('h2').textContent = p.nombre;
+      el.querySelector('.cat').textContent = p.categoria;
+      el.querySelector('.desc').textContent = p.descripcion;
+      lista.appendChild(el);
+    }
+  }
+
+  fetch('productos.json')
+    .then(r => r.json())
+    .then(datos => {
+      productos = datos;
+      [...new Set(productos.map(p => p.categoria))].sort().forEach(c => {
+        const o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        categoria.appendChild(o);
+      });
+      mostrar();
+    })
+    .catch(() => {
+      lista.innerHTML = '<p class="vacio">No se pudo cargar productos.json. Si abriste el archivo con doble clic, usa un servidor local o publícalo en GitHub Pages.</p>';
+    });
+
+  buscar.addEventListener('input', mostrar);
+  categoria.addEventListener('change', mostrar);
+</script>
+</body>
+</html>
