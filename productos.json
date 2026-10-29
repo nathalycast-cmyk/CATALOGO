@@ -8,3 +8,4 @@
   { "id": 7, "nombre": "Albahaca", "categoria": "Aromáticas", "precio": 8000, "emoji": "🌿", "descripcion": "Aromática para cocina, riego frecuente." },
   { "id": 8, "nombre": "Menta", "categoria": "Aromáticas", "precio": 7000, "emoji": "🍃", "descripcion": "Crece sola y huele increíble." }
 ]
+
